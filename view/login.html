@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                var username = document.getElementById('username').value;
+                var password = document.getElementById('password').value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '../controller/logincheck.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            var response = xhr.responseText.trim();
+                            if (response === 'success') {
+                                window.location.href = '../view/home.html';
+                            } else {
+                                alert(response);
+                            }
+                        } else {
+                            console.error("AJAX error: " + xhr.status + ' : ' + xhr.statusText);
+                            alert("An error occurred while processing your request.");
+                        }
+                    }
+                };
+
+                xhr.send('username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
+            });
+        });
+    </script>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <div style="background-color: white; padding: 30px 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 300px;">
+        <h2 style="text-align: center; color: #333; margin-bottom: 20px;">Login</h2>
+        <form style="display: flex; flex-direction: column;">
+            <div style="margin-bottom: 15px;">
+                <label for="username" style="display: block; color: #333;">Username:</label>
+                <input type="text" name="username" id="username" required style="width: 92%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="password" style="display: block; color: #333;">Password:</label>
+                <input type="password" name="password" id="password" required style="width: 92%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-top: 15px;">
+                <button type="submit" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background-color: #4CAF50; color: white; cursor: pointer; font-size: 20px;">Login</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
